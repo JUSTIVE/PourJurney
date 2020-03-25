@@ -12,13 +12,21 @@ def getRange(data):
 def getProperC(data):
     return int(math.log(data.size)/math.log(2))+1
 
-showGrouped = False
+showGrouped = True
+showRelative = True
 
 binValue = getProperC(data) if showGrouped else getRange(data)
-arr=plt.hist(data,bins=binValue, weights = np.ones_like(data)/ (data.size))
+weightsValue = (np.ones_like(data)/data.size) if showRelative else None
+arr=plt.hist(data,bins=binValue, weights = weightsValue)
 
+def showValue(value,isRelative):
+    if isRelative:
+        return str(round(value*100,2))+"%"
+    else:
+        return str(int(value))
+plt.pie(data)
 for i in range(binValue):
-    plt.text(arr[1][i],arr[0][i],str(round(arr[0][i]*100,2))+"%")
+    plt.text(arr[1][i],arr[0][i],showValue(arr[0][i],showRelative))
 
 plt.ylabel('numbers')
 plt.xlabel('weight')
